@@ -1,11 +1,12 @@
 import { useState } from "react";
 
 const Searchrecipy = () => {
-    const [mealData, setMealData] = useState([]);  // Initialize as an empty array
-    const [recipes, setRecipes] = useState("");  // Default as empty string
+    const [mealData, setMealData] = useState([]);  // Initialize as an empty array for random recipes
+    const [allRecipes, setAllRecipes] = useState([]);  // New state to store all 25 recipes
+    const [recipes, setRecipes] = useState("");  // Default as empty string for user input
     const [recipeNumbers, setRecipeNumbers] = useState(0);  // Default as 0
-    const [selectedRecipe, setSelectedRecipe] = useState(null); // State to hold the selected recipe details
-    const [extractedRecipeData, setExtractedRecipeData] = useState(null); // State for the extracted data
+    const [selectedRecipe, setSelectedRecipe] = useState(null);  // State to hold the selected recipe details
+    const [extractedRecipeData, setExtractedRecipeData] = useState(null);  // State for the extracted data
 
     // Handle input change for ingredients
     function handleIngredientsChange(e) {
@@ -24,12 +25,20 @@ const Searchrecipy = () => {
             return;  // Prevent making the API call if inputs are empty
         }
 
-        fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${recipes}&number=${recipeNumbers}&apiKey=2940e997aaab4a28bbb4b6560d0477b2`)
+        // Check if we've already fetched results for the same ingredients
+        if (allRecipes.length > 0 && recipes === allRecipes[0].ingredients) {
+            console.log("Using previously fetched results");
+            setMealData(getRandomRecipes(allRecipes, 4)); // Select 4 random recipes from the stored 25
+            return;
+        }
+
+        // Fetch data from the API using the ingredients and number
+        fetch(`https://api.spoonacular.com/recipes/findByIngredients?ingredients=${recipes}&number=25&apiKey=2940e997aaab4a28bbb4b6560d0477b2`)
             .then((response) => response.json())
             .then((data) => {
-                // Check if the data is an array
                 if (Array.isArray(data)) {
-                    setMealData(data);  // Save response to mealData state
+                    setAllRecipes(data);  // Store the fetched 25 recipes in the new state
+                    setMealData(getRandomRecipes(data, 4));  // Select 4 random recipes
                 } else {
                     console.log("Received data is not an array.");
                     setMealData([]);  // If data is not an array, set mealData to an empty array
@@ -39,6 +48,23 @@ const Searchrecipy = () => {
                 console.log("Error fetching meal data.");
                 setMealData([]);  // Set to empty array in case of an error
             });
+    }
+
+    // Function to get random recipes from the fetched data
+    function getRandomRecipes(data, number) {
+        const randomRecipes = [];
+        const usedIndexes = new Set();
+
+        // Randomly pick 'number' recipes
+        while (randomRecipes.length < number) {
+            const randomIndex = Math.floor(Math.random() * data.length);
+            if (!usedIndexes.has(randomIndex)) {
+                usedIndexes.add(randomIndex);
+                randomRecipes.push(data[randomIndex]);
+            }
+        }
+
+        return randomRecipes;
     }
 
     // Display more details of the selected recipe
@@ -58,8 +84,9 @@ const Searchrecipy = () => {
     }
 
     return (
-        <div className="container mt-4">
-            <section className="controls mb-4">
+    <div className="d-flex m-0 rounded-bottom-circle" style={{ backgroundColor: '#7dcfb6',height:'600px'}}>
+        <div className="container mt-4" >
+            <section className="controls p-5" >
                 {/* Ingredients input */}
                 <div className="mb-3">
                     <input 
@@ -81,11 +108,9 @@ const Searchrecipy = () => {
                         onChange={handleNumberChange}
                     />
                 </div>
-            </section>
-            <button className="btn btn-primary" onClick={getMealData}>Get Daily Meal Plan</button>
-
-            {/* Display meal data if available */}
-            {Array.isArray(mealData) && mealData.length > 0 ? (
+                <button className="btn btn-primary" onClick={getMealData}>Get Daily Meal Plan</button>
+                    {/* Display meal data if available */}
+                    {Array.isArray(mealData) && mealData.length > 0 ? (
                 <div className="mt-4">
                     <h3 className="mb-4">Meal Results:</h3>
                     <div className="row">
@@ -105,6 +130,9 @@ const Searchrecipy = () => {
             ) : (
                 <p>No meals found or data is not in the expected format.</p>
             )}
+            </section>
+
+           
 
             {/* Display the detailed recipe if selected */}
             {selectedRecipe && extractedRecipeData && (
@@ -145,6 +173,7 @@ const Searchrecipy = () => {
                 </div>
             )}
         </div>
+    </div>
     );
 };
 

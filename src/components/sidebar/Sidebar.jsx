@@ -2,11 +2,10 @@
 const Sidebar = () => {
   return (
     <div>
-      <div className='card'>
-            <div className='card-header'>helo</div>
-            
-      </div>
-      <div><p>hlo</p></div>
+        <nav className="navbar navbar-light" style={{ backgroundColor: '#7dcfb6' }}>
+        <span className="navbar-brand mb-2 h1 ms-5 text-light text-uppercase fs-3">U & Recipy</span>
+        </nav>
+
     </div>
   )
 }
