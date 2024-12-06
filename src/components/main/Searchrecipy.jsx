@@ -134,10 +134,12 @@ const Searchrecipy = () => {
                         </section>     
                 </div>
             </div>
-            <div className="ms-5">
+            <div className="ms-5 me-5">
                     {/* Display a message after clicking on a recipe */}
                     {error ? (
-                        ""
+                        <div className="alert alert-danger mt-5">
+                        <p >{error}</p> {/* Display the error message */}
+            </div>
                     ) : (
                         isClicked && (
                             <div className="mt-5">
@@ -232,9 +234,7 @@ const Searchrecipy = () => {
                     }
                     
             </div>
-                <div className="alert alert-danger mt-5">
-                            <p>{error}</p> {/* Display the error message */}
-                </div>
+                
         </div>
     );
 };
