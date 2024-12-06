@@ -1,4 +1,6 @@
 import { useState } from "react";
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 
 const Searchrecipy = () => {
     const [mealData, setMealData] = useState([]);  // Initialize as an empty array for random recipes
@@ -8,6 +10,9 @@ const Searchrecipy = () => {
     const [selectedRecipe, setSelectedRecipe] = useState(null);  // State to hold the selected recipe details
     const [extractedRecipeData, setExtractedRecipeData] = useState(null);  // State for the extracted data
     const [isClicked, setIsClicked] = useState(false);  // State to track if a recipe is clicked
+
+    const [open, setOpen] = useState(false);
+    const[error,setError] = useState("");
 
     // Handle input change for ingredients
     function handleIngredientsChange(e) {
@@ -23,7 +28,7 @@ const Searchrecipy = () => {
     function getMealData() {
         setIsClicked(true);  // Set isClicked to true to indicate that the recipe is clicked
         if (!recipes || !recipeNumbers) {
-            console.log("Please enter both ingredients and number of recipes.");
+            setError("Please enter both ingredients and number of recipes.");
             return;  // Prevent making the API call if inputs are empty
         }
 
@@ -41,8 +46,9 @@ const Searchrecipy = () => {
                 if (Array.isArray(data)) {
                     setAllRecipes(data);  // Store the fetched 25 recipes in the new state
                     setMealData(getRandomRecipes(data,recipeNumbers));  // Select 4 random recipes
+                    setError("")    
                 } else {
-                    console.log("Received data is not an array.");
+                    setError("Payment is Required");
                     setMealData([]);  // If data is not an array, set mealData to an empty array
                 }
             })
@@ -71,7 +77,7 @@ const Searchrecipy = () => {
 
     // Display more details of the selected recipe
     function handleRecipeClick(meal) {
-        setIsClicked(true);  // Set isClicked to true to indicate that the recipe is clicked
+        setOpen(true);  // Set isClicked to true to indicate that the recipe is clicked
         setSelectedRecipe(meal);  // Set the clicked recipe to show more details
         
         // Fetch additional data using the extract endpoint
@@ -88,17 +94,18 @@ const Searchrecipy = () => {
 
     return (
         <div >
-            <div className={`d-flex m-0 ${isClicked ? 'rounded-bottom-circle' : ''}`} style={{ backgroundColor: '#7dcfb6',height: isClicked ? '400px' : '700px' }}>
+            <div className={`d-flex m-0 ${isClicked ? 'rounded-bottom-circle' : ''}`} style={{ backgroundColor: '#7dcfb6',height: isClicked ? '450px' : '700px' }}>
                 <div className="container ms-5 me-5 mt-4 mb-5">
-                        <section className="controls "style={{marginTop:isClicked?'100px':'200px'}}>
+                        <section className="controls "style={{marginTop:isClicked?'':'100px'}}>
                             {/* Ingredients input */}
                             <div className="row">
-                                <div className="col-sm-3">
+                                <div className="col-sm-2">
                                 </div>
-                                <div className="col-sm-6 mb-5 text-light">
-                                    <h1>Enter the ingredient you have & select number of recipy you want</h1>
+                                <div className="col-sm-8 mb-4 text-light text-center">
+                                    <h1>Enter the ingredient you have & </h1>
+                                    <h1>select number of recipy you want</h1>
                                 </div>
-                                <div className="col-sm-3">
+                                <div className="col-sm-2">
                                 </div>
                             <div className="mb-3 col-sm-3"></div>
                                 <div className="mb-3 col-sm-4">
@@ -123,22 +130,24 @@ const Searchrecipy = () => {
                                 <div className="mb-3 col-sm-3"></div>
                             </div>
                             
-                            <button className="btn btn-primary mx-auto d-block mt-4" onClick={getMealData}>Get Recipe</button>
-                        </section>
-
-                    
-
-                        
+                            <button className="btn btn-danger mx-auto d-block mt-4" onClick={getMealData}>Get Recipe</button>
+                        </section>     
                 </div>
             </div>
             <div className="ms-5">
                     {/* Display a message after clicking on a recipe */}
-            {isClicked && (
-                        <div className="mt-5">
-                            <p>{selectedRecipe ? "Recipe Selected: " + selectedRecipe.title : "No recipe selected yet."}</p>
-                            <p>{isClicked ? "hello" : "Please click a recipe"}</p>
-                        </div>
-                    )}
+                    {error ? (
+                        ""
+                    ) : (
+                        isClicked && (
+                            <div className="mt-5">
+                                <p>{selectedRecipe ? "Recipe Selected: " + selectedRecipe.title : "No recipe selected yet."}</p>
+                                <p>{isClicked ? "Please select a recipe" : "Please click a recipe"}</p>
+                            </div>
+                        ))
+                    }
+
+           
 
                     {/* Display meal data if available */}
                     {Array.isArray(mealData) && mealData.length > 0 ? 
@@ -163,44 +172,69 @@ const Searchrecipy = () => {
 
                             {/* Display the detailed recipe if selected */}
                             {selectedRecipe && extractedRecipeData && (
-                                <div className="mt-5">
-                                    <h3 className="mb-3">{selectedRecipe.title}</h3>
-                                    {/* Recipe Image */}
-                                    <div className="mb-4">
-                                        <img
-                                            src={selectedRecipe.image}
-                                            alt={selectedRecipe.title}
-                                            className="img-fluid rounded"
-                                            style={{ maxWidth: "500px" }}
-                                        />
-                                    </div>
+                                <div className="mt-5 " >
+                                   
+                                    <Popup
+                                        open={open}
+                                        onClose={() => setOpen(false)}
+                                        closeOnDocumentClick
+                                        modal
+                                        contentStyle={{
+                                        maxWidth: "600px",
+                                        width: "80%",
+                                        padding: "20px",
+                                        borderRadius: "10px",
+                                        backgroundColor: "#fff",
+                                        boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)",
+                                        }}
+                                        overlayStyle={{
+                                        backgroundColor: "rgba(0, 0, 0, 0.5)",
+                                        }}>
+                                        <div className="modal-body" style={{ maxHeight: "400px", overflowY: "auto" }}>
+                                            <h3 className="mb-3">{selectedRecipe.title}</h3>
+                                            {/* Recipe Image */}
+                                                <div className="mb-4">
+                                                    <img
+                                                        src={selectedRecipe.image}
+                                                        alt={selectedRecipe.title}
+                                                        className="img-fluid rounded"
+                                                        
+                                                    />
+                                                </div>
+                                            <div> {/* Ingredients List */}
+                                                <div className="mb-4">
+                                                    <h4>Ingredients</h4>
+                                                    <ul className="list-group">
+                                                        {extractedRecipeData.extendedIngredients.map((ingredient, index) => (
+                                                            <li key={index} className="list-group-item">
+                                                                {ingredient.original}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                            </div>
 
-                                    {/* Ingredients List */}
-                                    <div className="mb-4">
-                                        <h4>Ingredients</h4>
-                                        <ul className="list-group">
-                                            {extractedRecipeData.extendedIngredients.map((ingredient, index) => (
-                                                <li key={index} className="list-group-item">
-                                                    {ingredient.original}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-
-                                    {/* Instructions */}
-                                    <div>
-                                        <h4>Instructions</h4>
-                                        <div className="card">
-                                            <div className="card-body">
-                                                <p className="card-text">{extractedRecipeData.instructions}</p>
+                                            {/* Instructions */}
+                                            <div>
+                                                <h4>Instructions</h4>
+                                                <div className="card">
+                                                    <div className="card-body">
+                                                        <p className="card-text">{extractedRecipeData.instructions}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        
+                                    </Popup>
+                                   
                                 </div>
                             )
                     }
+                    
             </div>
-            
+                <div className="alert alert-danger mt-5">
+                            <p>{error}</p> {/* Display the error message */}
+                </div>
         </div>
     );
 };
