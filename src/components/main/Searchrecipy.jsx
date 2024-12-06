@@ -7,6 +7,7 @@ const Searchrecipy = () => {
     const [recipeNumbers, setRecipeNumbers] = useState(0);  // Default as 0
     const [selectedRecipe, setSelectedRecipe] = useState(null);  // State to hold the selected recipe details
     const [extractedRecipeData, setExtractedRecipeData] = useState(null);  // State for the extracted data
+    const [isClicked, setIsClicked] = useState(false);  // State to track if a recipe is clicked
 
     // Handle input change for ingredients
     function handleIngredientsChange(e) {
@@ -16,10 +17,11 @@ const Searchrecipy = () => {
     // Handle input change for number of recipes
     function handleNumberChange(e) {
         setRecipeNumbers(e.target.value);
-    }
+    }   
 
     // Fetch meal data from API
     function getMealData() {
+        setIsClicked(true);  // Set isClicked to true to indicate that the recipe is clicked
         if (!recipes || !recipeNumbers) {
             console.log("Please enter both ingredients and number of recipes.");
             return;  // Prevent making the API call if inputs are empty
@@ -38,7 +40,7 @@ const Searchrecipy = () => {
             .then((data) => {
                 if (Array.isArray(data)) {
                     setAllRecipes(data);  // Store the fetched 25 recipes in the new state
-                    setMealData(getRandomRecipes(data, 4));  // Select 4 random recipes
+                    setMealData(getRandomRecipes(data,recipeNumbers));  // Select 4 random recipes
                 } else {
                     console.log("Received data is not an array.");
                     setMealData([]);  // If data is not an array, set mealData to an empty array
@@ -69,6 +71,7 @@ const Searchrecipy = () => {
 
     // Display more details of the selected recipe
     function handleRecipeClick(meal) {
+        setIsClicked(true);  // Set isClicked to true to indicate that the recipe is clicked
         setSelectedRecipe(meal);  // Set the clicked recipe to show more details
         
         // Fetch additional data using the extract endpoint
@@ -84,96 +87,121 @@ const Searchrecipy = () => {
     }
 
     return (
-    <div className="d-flex m-0 rounded-bottom-circle" style={{ backgroundColor: '#7dcfb6',height:'600px'}}>
-        <div className="container mt-4" >
-            <section className="controls p-5" >
-                {/* Ingredients input */}
-                <div className="mb-3">
-                    <input 
-                        type="text" 
-                        className="form-control" 
-                        placeholder="Enter the ingredients you have" 
-                        value={recipes}
-                        onChange={handleIngredientsChange}
-                    />
+        <div >
+            <div className={`d-flex m-0 ${isClicked ? 'rounded-bottom-circle' : ''}`} style={{ backgroundColor: '#7dcfb6',height: isClicked ? '400px' : '700px' }}>
+                <div className="container ms-5 me-5 mt-4 mb-5">
+                        <section className="controls "style={{marginTop:isClicked?'100px':'200px'}}>
+                            {/* Ingredients input */}
+                            <div className="row">
+                                <div className="col-sm-3">
+                                </div>
+                                <div className="col-sm-6 mb-5 text-light">
+                                    <h1>Enter the ingredient you have & select number of recipy you want</h1>
+                                </div>
+                                <div className="col-sm-3">
+                                </div>
+                            <div className="mb-3 col-sm-3"></div>
+                                <div className="mb-3 col-sm-4">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        placeholder="Enter the ingredients you have"
+                                        value={recipes}
+                                        onChange={handleIngredientsChange}
+                                    />
+                                </div>
+
+                                {/* Number of recipes input */}
+                                <div className="mb-3 col-sm-2">
+                                    <input
+                                        type="number"
+                                        className="form-control"
+                                        value={recipeNumbers}
+                                        onChange={handleNumberChange}
+                                    />
+                                </div>
+                                <div className="mb-3 col-sm-3"></div>
+                            </div>
+                            
+                            <button className="btn btn-primary mx-auto d-block mt-4" onClick={getMealData}>Get Recipe</button>
+                        </section>
+
+                    
+
+                        
                 </div>
-                
-                {/* Number of recipes input */}
-                <div className="mb-3">
-                    <input 
-                        type="number" 
-                        className="form-control" 
-                        placeholder="Enter the number of recipes you want" 
-                        value={recipeNumbers}
-                        onChange={handleNumberChange}
-                    />
-                </div>
-                <button className="btn btn-primary" onClick={getMealData}>Get Daily Meal Plan</button>
+            </div>
+            <div className="ms-5">
+                    {/* Display a message after clicking on a recipe */}
+            {isClicked && (
+                        <div className="mt-5">
+                            <p>{selectedRecipe ? "Recipe Selected: " + selectedRecipe.title : "No recipe selected yet."}</p>
+                            <p>{isClicked ? "hello" : "Please click a recipe"}</p>
+                        </div>
+                    )}
+
                     {/* Display meal data if available */}
-                    {Array.isArray(mealData) && mealData.length > 0 ? (
-                <div className="mt-4">
-                    <h3 className="mb-4">Meal Results:</h3>
-                    <div className="row">
-                        {mealData.map((meal, index) => (
-                            <div className="col-md-4 mb-4" key={index}>
-                                <div className="card" onClick={() => handleRecipeClick(meal)} style={{ cursor: "pointer" }}>
-                                    <img src={meal.image} alt={meal.title} className="card-img-top" />
-                                    <div className="card-body">
-                                        <h5 className="card-title">{meal.title}</h5>
-                                        <p className="card-text">Click for more details</p>
+                    {Array.isArray(mealData) && mealData.length > 0 ? 
+                            (
+                                <div className="mt-4">
+                                    <h3 className="mb-4">Meal Results:</h3>
+                                    <div className="row">
+                                        {mealData.map((meal, index) => (
+                                            <div className="col-md-4 mb-4" key={index}>
+                                                <div className="card" onClick={() => handleRecipeClick(meal)} style={{ cursor: "pointer" }}>
+                                                    <img src={meal.image} alt={meal.title} className="card-img-top" />
+                                                    <div className="card-body">
+                                                        <h5 className="card-title">{meal.title}</h5>
+                                                        <p className="card-text">Click for more details</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            ) : (
-                <p>No meals found or data is not in the expected format.</p>
-            )}
-            </section>
+                            ) : ""}
 
-           
+                            {/* Display the detailed recipe if selected */}
+                            {selectedRecipe && extractedRecipeData && (
+                                <div className="mt-5">
+                                    <h3 className="mb-3">{selectedRecipe.title}</h3>
+                                    {/* Recipe Image */}
+                                    <div className="mb-4">
+                                        <img
+                                            src={selectedRecipe.image}
+                                            alt={selectedRecipe.title}
+                                            className="img-fluid rounded"
+                                            style={{ maxWidth: "500px" }}
+                                        />
+                                    </div>
 
-            {/* Display the detailed recipe if selected */}
-            {selectedRecipe && extractedRecipeData && (
-                <div className="mt-5">
-                    <h3 className="mb-3">{selectedRecipe.title}</h3>
-                    
-                    {/* Recipe Image */}
-                    <div className="mb-4">
-                        <img 
-                            src={selectedRecipe.image} 
-                            alt={selectedRecipe.title} 
-                            className="img-fluid rounded" 
-                            style={{ maxWidth: "500px" }}
-                        />
-                    </div>
+                                    {/* Ingredients List */}
+                                    <div className="mb-4">
+                                        <h4>Ingredients</h4>
+                                        <ul className="list-group">
+                                            {extractedRecipeData.extendedIngredients.map((ingredient, index) => (
+                                                <li key={index} className="list-group-item">
+                                                    {ingredient.original}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
 
-                    {/* Ingredients List */}
-                    <div className="mb-4">
-                        <h4>Ingredients</h4>
-                        <ul className="list-group">
-                            {extractedRecipeData.extendedIngredients.map((ingredient, index) => (
-                                <li key={index} className="list-group-item">
-                                    {ingredient.original}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Instructions */}
-                    <div>
-                        <h4>Instructions</h4>
-                        <div className="card">
-                            <div className="card-body">
-                                <p className="card-text">{extractedRecipeData.instructions}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+                                    {/* Instructions */}
+                                    <div>
+                                        <h4>Instructions</h4>
+                                        <div className="card">
+                                            <div className="card-body">
+                                                <p className="card-text">{extractedRecipeData.instructions}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                    }
+            </div>
+            
         </div>
-    </div>
     );
 };
 
