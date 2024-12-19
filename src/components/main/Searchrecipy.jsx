@@ -1,4 +1,7 @@
 import { useState } from "react";
+
+import Sidebar from "../sidebar/Sidebar";
+
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 
@@ -94,6 +97,7 @@ const Searchrecipy = () => {
 
     return (
         <div >
+                <Sidebar/>
             <div className={`d-flex m-0 ${isClicked ? 'rounded-bottom-circle' : ''}`} style={{ backgroundColor: '#7dcfb6',height: isClicked ? '450px' : '700px' }}>
                 <div className="container ms-5 me-5 mt-4 mb-5">
                         <section className="controls "style={{marginTop:isClicked?'':'100px'}}>
@@ -220,7 +224,7 @@ const Searchrecipy = () => {
                                                 <h4>Instructions</h4>
                                                 <div className="card">
                                                     <div className="card-body">
-                                                        <p className="card-text">{extractedRecipeData.instructions}</p>
+                                                    <p className="card-text" dangerouslySetInnerHTML={{ __html: extractedRecipeData.instructions }}></p>
                                                     </div>
                                                 </div>
                                             </div>

@@ -1,12 +1,17 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import Sidebar from "./components/sidebar/Sidebar"
-import Searchrecipy from "./components/main/Searchrecipy"
+import Searchrecipy from './components/main/Searchrecipy';
+import Home from "./components/main/Home";
+
 const App = () => {
   return (
   <div>
-    <Sidebar/>
-    <Searchrecipy/>
-
+    <BrowserRouter>
+      <Routes>
+              <Route index element={<Home />}/>
+              <Route path="/Searchrecipy" element={<Searchrecipy />}/>
+      </Routes>
+    </BrowserRouter>
   </div>
   )
 }
