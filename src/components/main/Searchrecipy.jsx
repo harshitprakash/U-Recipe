@@ -103,9 +103,9 @@ const Searchrecipy = () => {
     return (
         <div>
             <Sidebar />
-            <div className={`d-flex m-0 ${isClicked ? 'rounded-bottom-circle' : ''}`} style={{ backgroundColor: '#7dcfb6', height: isClicked ? '450px' : '700px' }}>
+            <div className={`d-flex m-0 ${isClicked ? 'rounded-bottom-circle' : ''}`} style={{ backgroundColor: 'rgb(45, 40, 62)', height: isClicked ? '600px' : '100%' }}>
                 <div className="container ms-5 me-5 mt-4 mb-5">
-                    <section className="controls" style={{ marginTop: isClicked ? '' : '100px' }}>
+                    <section className="controls" style={{ marginTop: isClicked ? '100px' : '240px', marginBottom:'240px'}}>
                         {/* Ingredients input */}
                         <div className="row">
                             <div className="col-sm-2"></div>
