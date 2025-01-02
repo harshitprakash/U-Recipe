@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 
-const Sidebar = () => {
+const Navbar = () => {
   return (
     <div>
       {/* Navbar container */}
       <nav className="navbar navbar-expand-lg" style={{
-        backgroundColor: 'rgb(1, 1, 1,0.3)', 
+        backgroundColor: 'rgb(75, 18, 76,0.8)', 
         position: 'fixed', 
         top: 0, 
         left: 0, 
@@ -15,7 +15,7 @@ const Sidebar = () => {
       }}>
         <div className="container-fluid ms-lg-5 me-lg-5 ms-sm-1 me-sm-1">
           <span className="navbar-brand mb-2">
-            <a href="/" className="h1 text-light text-uppercase fs-3 text-decoration-none">U & Recipy</a>
+            <a href="/" className="h1 text-uppercase fs-3 text-decoration-none" style={{color:'rgb(254, 254, 254)'}}>U & Recipy</a>
           </span>
 
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,4 +38,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default Navbar;

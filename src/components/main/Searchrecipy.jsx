@@ -1,7 +1,9 @@
 import { useState } from "react";
-import Sidebar from "../sidebar/Sidebar";
+import Sidebar from "../elements/Navbar";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
+import Navbar from "../elements/Navbar";
+import Footer from "../elements/Footer";
 
 const Searchrecipy = () => {
     const [mealData, setMealData] = useState([]);  // Initialize as an empty array for random recipes
@@ -102,45 +104,63 @@ const Searchrecipy = () => {
 
     return (
         <div>
-            <Sidebar />
-            <div className={`d-flex m-0 ${isClicked ? 'rounded-bottom-circle' : ''}`} style={{ backgroundColor: 'rgb(45, 40, 62)', height: isClicked ? '600px' : '100%' }}>
-                <div className="container ms-5 me-5 mt-4 mb-5">
-                    <section className="controls" style={{ marginTop: isClicked ? '100px' : '240px', marginBottom:'240px'}}>
-                        {/* Ingredients input */}
-                        <div className="row">
-                            <div className="col-sm-2"></div>
-                            <div className="col-sm-8 mb-4 text-light text-center">
-                                <h1>Enter the ingredient you have & </h1>
-                                <h1>select number of recipes you want</h1>
-                            </div>
-                            <div className="col-sm-2"></div>
-                            <div className="mb-3 col-sm-3"></div>
-                            <div className="mb-3 col-sm-4">
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    placeholder="Enter the ingredients you have"
-                                    value={recipes}
-                                    onChange={handleIngredientsChange}
-                                />
-                            </div>
+            <Navbar/>
+            <div className={`embed-responsive embed-responsive-16by9 `} style={{ position: 'relative' }}>
+                    <video
+                        className={`embed-responsive-item d-flex m-0 ${isClicked ? 'rounded-bottom-circle' : ''}`}
+                        autoPlay
+                        muted
+                        loop
+                        style={{height: isClicked ? '600px' : '100vh',objectFit: 'cover',width:'100%',filter:'blur(5px)' }}
+                        
+                    >
+                        <source src="/videos/video2.mp4" type="video/mp4" />
+                        Your browser does not support the video tag.
+                    </video>
 
-                            {/* Number of recipes input */}
-                            <div className="mb-3 col-sm-2">
-                                <input
-                                    type="number"
-                                    className="form-control"
-                                    value={recipeNumbers}
-                                    onChange={handleNumberChange}
-                                />
-                            </div>
-                            <div className="mb-3 col-sm-3"></div>
-                        </div>
+                 {/* Text Overlay */}
+                <div className="position-absolute top-50 start-50 translate-middle text-center text-white"style={{zIndex: 2,}}>
+                            <div className="container mt-4 mb-5">
+                                <section className="controls" style={{ marginTop: isClicked ? '200px' : '240px', marginBottom:'240px'}}>
+                                    {/* Ingredients input */}
+                                    <div className="row">
+                                        <div className="col-sm-1"></div>
+                                        <div className="col-sm-10 mb-4 mt-5 text-light text-center">
+                                            <h1>Enter the <a href="" style={{color:'white',textDecoration:'none'}}>Ingredient</a> you have & </h1>
+                                            <h1>select number of <a href="" style={{color:'white',textDecoration:'none'}}>Recipy</a>  you want</h1>
+                                        </div>
+                                        <div className="col-sm-1"></div>
+                                        <div className="mb-3 col-sm-3"></div>
+                                        <div className="mb-3 col-sm-4">
+                                            <input
+                                                type="text"
+                                                className="form-control"
+                                                placeholder="Enter the ingredients you have"
+                                                value={recipes}
+                                                onChange={handleIngredientsChange}
+                                            />
+                                        </div>
 
-                        <button className="btn btn-danger mx-auto d-block mt-4" onClick={getMealData}>Get Recipe</button>
-                    </section>     
+                                        {/* Number of recipes input */}
+                                        <div className="mb-3 col-sm-2">
+                                            <input
+                                                type="number"
+                                                className="form-control"
+                                                value={recipeNumbers}
+                                                onChange={handleNumberChange}
+                                            />
+                                        </div>
+                                        <div className="mb-3 col-sm-3"></div>
+                                    </div>
+
+                                    <button className="btn mx-auto d-block mt-4" onClick={getMealData} style={{backgroundColor:'white', color:'rgb(75, 18, 76)'}}> <b> Get Recipe</b></button>
+                                </section>     
+                            </div>
                 </div>
             </div>
+
+            
+
             <div className="ms-5 me-5">
                 {/* Display an error message if there is an error */}
                 {error && (
@@ -166,9 +186,11 @@ const Searchrecipy = () => {
                         <div className="row">
                             {mealData.map((meal, index) => (
                                 <div className="col-md-4 mb-4" key={index}>
-                                    <div className="card" onClick={() => handleRecipeClick(meal)} style={{ cursor: "pointer" }}>
-                                        <img src={meal.image} alt={meal.title} className="card-img-top" />
-                                        <div className="card-body">
+                                    <div className="card" onClick={() => handleRecipeClick(meal)} style={{ cursor: 'pointer',backgroundColor:'#4B124C',color:'white' }}>
+                                        <div className="card-head">
+                                         <img src={meal.image} alt={meal.title} className="card-img-top" />
+                                        </div>
+                                        <div className="card-body" >
                                             <h5 className="card-title">{meal.title}</h5>
                                             <p className="card-text">Click for more details</p>
                                         </div>
@@ -235,6 +257,7 @@ const Searchrecipy = () => {
                     </Popup>
                 )}
             </div>
+         <Footer/>
         </div>
     );
 };
