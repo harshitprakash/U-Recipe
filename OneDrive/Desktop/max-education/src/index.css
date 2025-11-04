@@ -1,0 +1,22 @@
+/* src/index.css */
+@import url('./assets/css/bootstrap.min.css');
+@import url('./assets/css/animate.min.css');
+@import url('./assets/css/aos.min.css');
+@import url('./assets/css/icofont.min.css');
+@import url('./assets/css/magnific-popup.css');
+@import url('./assets/css/meanmenu.css');
+/* @import url('./assets//css/owl.carousel.min.css'); */
+@import url('./assets/css/responsive.css');
+@import url('./assets/css/slick.css');
+@import url('./assets/css/swiper-bundle.min.css');
+@import url('./assets/css/style.css');
+/* @import url('./assets/css/style.css.map'); */
+@import url('./assets/css/swiper-bundle.min.css');
+@import url('./assets/css/plugins_plyr.css');
+
+/* Dark Mode */
+html.is_dark {
+  background: #111 !important;
+  color: #eee !important;
+}
+
