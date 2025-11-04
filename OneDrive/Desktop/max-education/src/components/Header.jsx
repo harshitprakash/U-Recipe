@@ -64,7 +64,7 @@ const Header = () => {
             <div className="col-xl-3 col-lg-3 col-md-6">
               <div className="headerarea__right">
                 <div className="headerarea__button">
-                  <a href="#">Get Start Here</a>
+                  <a href="/login">SignIn / SignUp</a>
                 </div>
               </div>
             </div>

@@ -104,15 +104,12 @@ const Breadcrumb = () => {
                     {
                       img: 'grid_1.png',
                       badge: 'Data & Tech',
-                      lessons: '23 Lesson',
-                      time: '1 hr 30 min',
-                      title: 'Foundation course to understand about software',
-                      price: '$32.00',
-                      oldPrice: '$67.00',
+                      time: '6 Months',
+                      title: 'Primary Telly',
+                      price: '800 Rs',
+                      oldPrice: '1000 Rs',
                       free: true,
-                      instructorImg: 'grid_small_1.jpg',
-                      instructor: 'Mirnsdo .H',
-                      rating: 4,
+                     
                     },
                     {
                       img: 'grid_2.png',
@@ -120,13 +117,11 @@ const Breadcrumb = () => {
                       badgeColor: 'blue__color',
                       lessons: '29 Lesson',
                       time: '2 hr 10 min',
-                      title: 'Nidnies course to understand about software',
-                      price: '$32.00',
-                      oldPrice: '$67.00',
+                      title: 'Basic Computers',
+                      price: '600 Rs',
+                      oldPrice: '1000 Rs',
                       free: true,
-                      instructorImg: 'grid_small_2.jpg',
-                      instructor: 'Rinis Jhon',
-                      rating: 4,
+                  
                     },
                     {
                       img: 'grid_3.png',
@@ -201,33 +196,17 @@ const Breadcrumb = () => {
                         <div className="gridarea__content">
                           <div className="gridarea__list">
                             <ul>
-                              <li><i className="icofont-book-alt"></i> {course.lessons}</li>
                               <li><i className="icofont-clock-time"></i> {course.time}</li>
                             </ul>
                           </div>
                           <div className="gridarea__heading">
-                            <h3><a href="/course-details">{course.title}</a></h3>
+                            <h3><a href="/course-details" >{course.title}</a></h3>
                           </div>
                           <div className="gridarea__price">
                             {course.price} <del>/{course.oldPrice}</del>
                             {course.free && <span> <del className="del__2">Free</del></span>}
                           </div>
-                          <div className="gridarea__bottom">
-                            <a href="/instructor-details">
-                              <div className="gridarea__small__img">
-                                <img loading="lazy" src={`/img/grid/${course.instructorImg}`} alt="instructor" />
-                                <div className="gridarea__small__content">
-                                  <h6>{course.instructor}</h6>
-                                </div>
-                              </div>
-                            </a>
-                            <div className="gridarea__star">
-                              {[...Array(5)].map((_, idx) => (
-                                <i key={idx} className={`icofont-star ${idx < course.rating ? '' : 'text-muted'}`}></i>
-                              ))}
-                              <span>(44)</span>
-                            </div>
-                          </div>
+                         
                         </div>
                       </div>
                     </div>
